@@ -1,6 +1,7 @@
 ---
 name: pay-and-book
-description: End-to-end hotel booking flow with USDC payment. Use this skill when the user asks to find AND book a hotel in one go, or when they want a complete travel booking handled for them — phrases like "book me a hotel in Tokyo with USDC", "find and book a place to stay in Paris and pay from my wallet", "I need a hotel for next week, just handle it". This skill orchestrates the full flow: search → choose → authenticate wallet → fund (if needed) → pay via x402 → confirm. Triggers when the user wants the agent to handle everything autonomously.
+description: End-to-end hotel booking flow with USDC payment. Use this skill when the user asks to find AND book a hotel in one go, or when they want a complete travel booking handled for them — phrases like "book me a hotel in Tokyo with USDC", 
+  "find and book a place to stay in Paris and pay from my wallet", "I need a hotel for next week, just handle it". This skill orchestrates the full flow: search → choose → authenticate wallet → fund (if needed) → pay via x402 → confirm. Triggers when the user wants the agent to handle everything autonomously.
 license: MIT
 ---
 
