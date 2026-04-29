@@ -8,7 +8,7 @@
 User: "Find me a hotel in Tokyo May 1-5 and book it with USDC from my wallet"
    ↓
 Agent autonomously:
-   1. Searches hotels via the tvl CLI (free, no payment)
+   1. Searches hotels via the travel-cli (free, no payment)
    2. Presents options, user picks one
    3. Authenticates the user's Coinbase wallet (email OTP)
    4. Funds the wallet if needed (Coinbase Onramp)
@@ -47,7 +47,7 @@ The combined install gives the agent everything it needs:
 
 ## Requirements
 
-- **Node.js 18+** (skills call `npx tvl@latest` and `npx awal@latest` which fetch the CLIs on demand)
+- **Node.js 18+** (skills call `npx @tvl-justin/travel-cli@latest` and `npx awal@latest` which fetch the CLIs on demand)
 - **A Coinbase account** with an Agentic Wallet (created via `awal` on first auth)
 - **Internet access** to reach the travel API and Base network
 
@@ -71,8 +71,8 @@ The booking endpoint (`POST /m2m-payment/book/`) must implement the x402 protoco
          │ uses skill                      │ uses skill
          ▼                                 ▼
 ┌─────────────────┐               ┌─────────────────────┐
-│  tvl CLI        │               │  awal CLI           │
-│  (this repo)    │               │  (Coinbase)         │
+│  travel-cli     │               │  awal CLI           │
+│  (companion)    │               │  (Coinbase)         │
 │                 │               │                     │
 │  search-hotel   │               │  authenticate       │
 │  search-package │               │  fund               │

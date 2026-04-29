@@ -6,7 +6,7 @@ license: MIT
 
 # search-hotel
 
-Search hotels using the `tvl` CLI. Returns a list of matching hotels with prices, ratings, and the IDs you need to book or look at room options.
+Search hotels using the `travel-cli`. Returns a list of matching hotels with prices, ratings, and the IDs you need to book or look at room options.
 
 ## When to use
 
@@ -21,20 +21,20 @@ Do NOT use this skill for flights, tours, restaurants, or non-accommodation trav
 
 ## Prerequisites
 
-The `tvl` CLI must be available. Run via `npx`:
+The `travel-cli` CLI must be available. Run via `npx`:
 
 ```bash
-npx tvl@latest search-hotel ...
+npx @tvl-justin/travel-cli@latest search-hotel ...
 ```
 
-If the user has installed `tvl` globally (`npm install -g tvl`), call `tvl` directly.
+If the user has installed it globally (`npm install -g @tvl-justin/travel-cli`), call `travel-cli` directly.
 
 ## How to call
 
 The full command:
 
 ```bash
-npx tvl@latest search-hotel \
+npx @tvl-justin/travel-cli@latest search-hotel \
   --location "<city or destination>" \
   --checkin <YYYY-MM-DD> \
   --checkout <YYYY-MM-DD> \

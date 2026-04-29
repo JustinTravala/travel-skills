@@ -47,7 +47,7 @@ Only proceed after the user says yes.
 ## How to call
 
 ```bash
-npx tvl@latest cancel \
+npx @tvl-justin/travel-cli@latest cancel \
   --booking-id "<bookingId>" \
   --last-name "<lastName>" \
   --email "<email>"

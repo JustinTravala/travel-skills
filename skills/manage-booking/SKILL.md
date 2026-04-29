@@ -30,7 +30,7 @@ If the user doesn't have the booking ID, ask them to find their confirmation ema
 ## How to call
 
 ```bash
-npx tvl@latest manage-booking \
+npx @tvl-justin/travel-cli@latest manage-booking \
   --booking-id "<bookingId>" \
   --last-name "<lastName>" \
   --email "<email>"

@@ -38,4 +38,4 @@ npx -y @agentskills/skills-ref validate ./skills/<your-skill>
 
 ## Versioning the underlying CLI
 
-All skills pin a major version of the `tvl` CLI via `npx tvl@latest ...`. When you publish a breaking CLI change, bump the major version and update each skill's command.
+All skills pin a major version of the `travel-cli` via `npx @tvl-justin/travel-cli@latest ...`. When you publish a breaking CLI change, bump the major version and update each skill's command.

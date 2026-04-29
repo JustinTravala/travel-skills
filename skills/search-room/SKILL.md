@@ -31,17 +31,21 @@ Both are in the JSON output of `search-hotel`. Don't ask the user — pull them 
 ## How to call
 
 ```bash
-npx tvl@latest search-package \
+npx @tvl-justin/travel-cli@latest search-package \
   --hotel-id "<hotelId>" \
-  --session-id "<sessionId>"
+  --session-id "<sessionId>" \
+  --checkin <YYYY-MM-DD> \
+  --checkout <YYYY-MM-DD>
 ```
+
+`--checkin` and `--checkout` are required by the CLI — reuse the dates from the prior `search-hotel` call.
 
 ### Optional overrides
 
 If the user wants different dates or occupancy than the original search, pass them explicitly:
 
 ```bash
-npx tvl@latest search-package \
+npx @tvl-justin/travel-cli@latest search-package \
   --hotel-id "h_001" \
   --session-id "abc123" \
   --checkin 2026-05-02 \
