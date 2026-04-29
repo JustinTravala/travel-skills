@@ -100,7 +100,7 @@ Always set `--max-amount` to roughly the expected total + a small buffer (5%).
 npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
   -X POST \
   -q '{"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp"}' \
-  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@travala.com","phone":"+84336657091"}}' \
+  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@example.com","phone":"+84336657091"}}' \
   --max-amount 1850000000
 ```
 

@@ -81,7 +81,7 @@ Retrieve booking details.
 travel-cli manage-booking \
   --booking-id "MO45L74J" \
   --last-name "nguyn" \
-  --email "iris@travala.com"
+  --email "iris@example.com"
 ```
 
 ### `travel-cli cancel`
@@ -92,7 +92,7 @@ Cancel a booking.
 travel-cli cancel \
   --booking-id "MO45L74J" \
   --last-name "nguyn" \
-  --email "iris@travala.com"
+  --email "iris@example.com"
 ```
 
 ## Booking workflow (full picture)
@@ -115,7 +115,7 @@ npx awal@latest authenticate --email me@example.com
 npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
   -X POST \
   -q '{"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp"}' \
-  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@travala.com","phone":"+84336657091"}}' \
+  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@example.com","phone":"+84336657091"}}' \
   --max-amount 1850000000
 
 # 5. Look up the booking later
