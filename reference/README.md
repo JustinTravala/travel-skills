@@ -7,7 +7,7 @@ A command-line tool for hotel search and booking management. Designed to be call
 This CLI **does not** include a `book` command. The booking endpoint of the travel API is x402-paywalled (HTTP 402 Payment Required + USDC on Base), and payment is handled by Coinbase's [`awal`](https://www.npmjs.com/package/awal) CLI:
 
 ```bash
-npx awal@latest x402 pay <booking-url> -X POST -d '{...}'
+npx awal@latest x402 pay <booking-url> -X POST -q '{...}' -d '{...}'
 ```
 
 This split keeps wallet/key handling fully inside Coinbase's secure infrastructure. See the [travel-skills](https://github.com/JustinTravala/travel-skills) repo for the full skill that orchestrates search + auth + fund + pay.
@@ -110,10 +110,12 @@ travel-cli search-package --hotel-id 38894021 --session-id 0aidL5kXJVtAS9oz \
 npx awal@latest authenticate --email me@example.com
 
 # 4. Book and pay in one call (x402)
-npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book/ \
+#    package_id + session_id go in the query string (-q),
+#    contact goes in the body (-d).
+npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
   -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"Justin@travala.com","phone":"+84336657091"},"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp"}' \
+  -q '{"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp"}' \
+  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@travala.com","phone":"+84336657091"}}' \
   --max-amount 1850000000
 
 # 5. Look up the booking later

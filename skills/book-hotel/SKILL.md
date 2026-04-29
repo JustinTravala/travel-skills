@@ -62,15 +62,17 @@ Only run the pay command after the user says yes (or equivalent). If the user al
 
 ## How to call
 
-Use `awal x402 pay` to call the booking endpoint. The CLI handles 402 → sign → retry automatically:
+Use `awal x402 pay` to call the booking endpoint. The CLI handles 402 → sign → retry automatically.
+
+The booking endpoint splits inputs across two places:
+- **Query string** (`-q` flag): `package_id`, `session_id` — the package the user picked and the search session it came from.
+- **Request body** (`-d` flag): the `contact` object only.
 
 ```bash
-npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book/ \
+npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
   -X POST \
-  -H "Content-Type: application/json" \
+  -q '{"package_id":"<packageId>","session_id":"<sessionId>"}' \
   -d '{
-    "package_id": "<packageId>",
-    "session_id": "<sessionId>",
     "contact": {
       "given_name": "<first>",
       "sur_name": "<last>",
@@ -80,7 +82,7 @@ npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-
   }'
 ```
 
-Note the snake_case field names (`package_id`, `session_id`, `given_name`, `sur_name`) — the booking endpoint expects this exact shape. The `contact` object is required and `phone` is part of it.
+Note the snake_case field names (`package_id`, `session_id`, `given_name`, `sur_name`) — the booking endpoint expects this exact shape. The `contact` object is required and `phone` is part of it. Do NOT put `package_id` / `session_id` in the body — they must be query params.
 
 ### Safety: cap maximum payment
 
@@ -95,10 +97,10 @@ Always set `--max-amount` to roughly the expected total + a small buffer (5%).
 ### Full example
 
 ```bash
-npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book/ \
+npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
   -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp","contact":{"given_name":"Nguyen","sur_name":"Van A","email":"guest@example.com","phone":"+84336657091"}}' \
+  -q '{"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp"}' \
+  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@travala.com","phone":"+84336657091"}}' \
   --max-amount 1850000000
 ```
 
