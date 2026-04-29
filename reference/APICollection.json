@@ -1,0 +1,194 @@
+{
+  "info": {
+    "_postman_id": "61abb967-c44f-4f71-ae50-5136c79ed297",
+    "name": "MCP",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "13339191"
+  },
+  "item": [
+    {
+      "name": "Search Hotel",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "sk-uyonldkLDgrD4fqrb0eZeWn8pMiDwYYB",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"lat\": 16.0544,\n    \"lng\": 108.2022,\n    \"rooms\": [\n        \"2\"\n    ],\n    \"checkIn\": \"2026-06-14\",\n    \"checkOut\": \"2026-06-18\",\n    \"location\": \"Da Nang, Vietnam\"\n    // ,\n    // \"filters\" : [\"all_inclusive\"]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-staging.gfzunbtj.com/searching/mcp/search-hotel",
+          "protocol": "https",
+          "host": [
+            "api-staging",
+            "gfzunbtj",
+            "com"
+          ],
+          "path": [
+            "searching",
+            "mcp",
+            "search-hotel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Manage booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "sk-uyonldkLDgrD4fqrb0eZeWn8pMiDwYYB",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"bookingId\" : \"MO45L74J\",\n    \"lastName\" : \"nguyn\",\n    \"email\": \"iris@travala.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-staging.gfzunbtj.com/orders/mcp/manage-booking",
+          "protocol": "https",
+          "host": [
+            "api-staging",
+            "gfzunbtj",
+            "com"
+          ],
+          "path": [
+            "orders",
+            "mcp",
+            "manage-booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search Package",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "sk-uyonldkLDgrD4fqrb0eZeWn8pMiDwYYB",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"hotelId\": \"38894021\",\n    \"sessionId\": \"0aidL5kXJVtAS9oz\",\n    \"checkIn\": \"2026-06-14\",\n    \"checkOut\": \"2026-06-18\",\n    \"rooms\": [\n        \"2\"\n    ]\n    // ,\"filters\" : [\"ocean_view\"]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-staging.gfzunbtj.com/searching/mcp/search-package",
+          "protocol": "https",
+          "host": [
+            "api-staging",
+            "gfzunbtj",
+            "com"
+          ],
+          "path": [
+            "searching",
+            "mcp",
+            "search-package"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel Booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "sk-uyonldkLDgrD4fqrb0eZeWn8pMiDwYYB",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"bookingId\": \"MO45L74J\",\n    \"lastName\": \"nguyn\",\n    \"email\": \"iris@travala.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api-staging.gfzunbtj.com/orders/mcp/cancel-booking",
+          "protocol": "https",
+          "host": [
+            "api-staging",
+            "gfzunbtj",
+            "com"
+          ],
+          "path": [
+            "orders",
+            "mcp",
+            "cancel-booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Book",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"contact\": {\n        \"given_name\": \"Justin\",\n        \"sur_name\": \"Ta\",\n        \"email\": \"Justin@travala.com\",\n        \"phone\": \"+84336657091\"\n    },\n    \"package_id\": \"e47otEJtYeZYblF9\",\n    \"session_id\": \"6kVmPYwZhQJewNTp\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book/",
+          "protocol": "https",
+          "host": [
+            "qpgdy2kn7v",
+            "ap-southeast-1",
+            "awsapprunner",
+            "com"
+          ],
+          "path": [
+            "m2m-payment",
+            "book",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
