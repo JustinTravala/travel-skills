@@ -51,16 +51,6 @@ The combined install gives the agent everything it needs:
 - **A Coinbase account** with an Agentic Wallet (created via `awal` on first auth)
 - **Internet access** to reach the travel API and Base network
 
-## Configuration
-
-If you self-host the travel API, point the CLI at it:
-
-```bash
-export TVL_API_URL="https://api.your-travel-service.com"
-```
-
-The booking endpoint (`POST /m2m-payment/book/`) must implement the x402 protocol — it should respond with HTTP 402 + payment requirements when called without an `X-PAYMENT` header.
-
 ## Architecture
 
 ```

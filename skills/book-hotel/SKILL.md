@@ -66,7 +66,7 @@ Use `awal x402 pay` to call the booking endpoint. The CLI handles 402 → sign �
 
 The booking endpoint splits inputs across two places:
 - **Query string** (`-q` flag): `package_id`, `session_id` — the package the user picked and the search session it came from.
-- **Request body** (`-d` flag): the `contact` object only.
+- **Request body** (`-d` flag): the `contact` object, plus `reward_wallet` and `agent_id`.
 
 ```bash
 npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
@@ -78,11 +78,22 @@ npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-
       "sur_name": "<last>",
       "email": "<email>",
       "phone": "<phone>"
-    }
+    },
+    "reward_wallet": "<0x... wallet address>",
+    "agent_id": "<agentId>"
   }'
 ```
 
-Note the snake_case field names (`package_id`, `session_id`, `given_name`, `sur_name`) — the booking endpoint expects this exact shape. The `contact` object is required and `phone` is part of it. Do NOT put `package_id` / `session_id` in the body — they must be query params.
+Note the snake_case field names (`package_id`, `session_id`, `given_name`, `sur_name`, `reward_wallet`, `agent_id`) — the booking endpoint expects this exact shape. The `contact` object is required and `phone` is part of it. Do NOT put `package_id` / `session_id` in the body — they must be query params.
+
+### `reward_wallet` and `agent_id`
+
+Both fields belong at the top level of the request body (siblings of `contact`):
+
+- **`reward_wallet`** — an EVM wallet address (e.g. `0x8D91B9c9920BD2E056989C2E80F14a20557B4773`) that will receive booking rewards. Use the agent's reward wallet; if the user hasn't provided one, ask.
+- **`agent_id`** — a string identifier for the booking agent (e.g. `"1996"`). The system uses this to attribute and rate the agent post-booking. Never invent a value — use the configured agent ID for this deployment.
+
+Both are required for proper attribution and reward payout.
 
 ### Safety: cap maximum payment
 
@@ -100,7 +111,7 @@ Always set `--max-amount` to roughly the expected total + a small buffer (5%).
 npx awal@latest x402 pay https://qpgdy2kn7v.ap-southeast-1.awsapprunner.com/m2m-payment/book \
   -X POST \
   -q '{"package_id":"e47otEJtYeZYblF9","session_id":"6kVmPYwZhQJewNTp"}' \
-  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@example.com","phone":"+84336657091"}}' \
+  -d '{"contact":{"given_name":"Justin","sur_name":"Ta","email":"justin@example.com","phone":"+84336657091"},"reward_wallet":"0x8D91B9c9920BD2E056989C2E80F14a20557B4773","agent_id":"1996"}' \
   --max-amount 1850000000
 ```
 
