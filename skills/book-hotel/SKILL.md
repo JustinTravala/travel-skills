@@ -152,9 +152,57 @@ The transaction hash (`paymentTxHash`) appears in the `X-PAYMENT-RESPONSE` heade
 - **`402 with amount > --max-amount`** — Booking total exceeds the safety cap. Stop, tell the user the actual amount, and ask whether to proceed with a higher cap.
 - **`Insufficient USDC balance`** — Trigger the `fund` skill to top up, then retry.
 - **`Wallet not authenticated`** — Trigger the `authenticate-wallet` skill, then retry.
-- **`Package no longer available`** (after payment attempt) — Prices/availability shift between search and book. Re-run `search-hotel` or `search-room`. If payment was already settled but booking failed, the API should refund automatically; tell the user and check `awal wallet history`.
+- **`Payment was authorized but rejected by server`** / **`X402 submission failed`** / **any post-authorization timeout** — DO NOT retry the `pay` command blindly. The on-chain settle and booking may have already succeeded — the agent only lost the response. Run the recovery flow below.
+- **`Package no longer available`** (before payment) — Re-run `search-hotel` or `search-room` to refresh; the `sessionId` may also have expired.
 - **`Session expired`** — Re-run search to get a new `sessionId`.
-- **Network error mid-payment** — Don't retry blindly. Check `awal wallet history` to see if payment went through. If it did, contact support with the tx hash; if not, ask the user whether to retry.
+- **Network error mid-payment** — Same as the post-authorization timeout case above: run the recovery flow before doing anything else.
+
+## Recovery: payment authorized but agent reports failure
+
+The most common false-failure mode: `awal x402 pay` signs the payment authorization, the server settles it on-chain AND completes the booking, but the response doesn't reach the agent in time → CLI throws `Payment was authorized but rejected by server`. Money is gone, booking exists, but the agent thinks it failed. Blindly retrying causes a **double charge**.
+
+When you see any of the errors flagged above, do this **before** mentioning failure to the user:
+
+### Step 1 — Run `travel-cli book-status`
+
+Use the same `package_id` and `session_id` you just tried to book with. No x402, no payment, no auth required:
+
+```bash
+npx @tvl-justin/travel-cli@latest book-status \
+  --package-id "<packageId>" \
+  --session-id "<sessionId>"
+```
+
+The CLI always emits JSON of shape `{ httpStatus, body, interpretation }`.
+
+### Step 2 — Interpret the response
+
+Branch on `httpStatus`:
+
+| `httpStatus` | `body` | Meaning | Action |
+|---|---|---|---|
+| `200` | `{ "status": "completed", "transaction": "0x…", "bookingId": "BK_…", … }` | Booking already succeeded. Agent timed out, but money was charged and the room is reserved. | Treat as success. Present confirmation to the user using this body (same shape as a normal happy-path response). **Do not retry payment.** |
+| `202` | `{ "status": "in_progress", "retry_after_ms": <N> }` | Server is still settling/booking. | Wait `body.retry_after_ms` (cap at ~10s per poll), then re-run `book-status`. Poll up to ~6 times. If still in_progress, tell the user a confirmation email will follow and to check `awal wallet history`. |
+| `404` | `{ "status": "not_found" }` | Nothing happened server-side — the failure is real. | Safe to retry the original `awal x402 pay` (or surface the original error to the user). |
+| `5xx` | error | Recovery endpoint itself is down. | Tell the user "I can't confirm whether the booking went through. Please check your email — Travala always sends a confirmation on success — and check `awal wallet history` for the transfer. Do not retry yet." |
+
+The `interpretation` field on the JSON output is a human-readable summary of the same mapping above — useful for surfacing to the user, but always branch your control flow on `httpStatus`.
+
+### Step 3 — On 200 (recovered)
+
+Present the result the same way as a normal success, but mention the recovery so the user understands what happened:
+
+> ✅ Booked! Confirmation **BK_2026_05_001**.
+> (The CLI initially reported a failure, but the booking actually went through — recovered from the server. No double charge.)
+> Park Hyatt Tokyo · May 1–5 · 1,800 USDC paid
+> Tx: 0xabc...def (view on basescan)
+> Confirmation email sent to guest@example.com.
+
+### What NOT to do
+
+- ❌ Re-run `awal x402 pay` after a post-authorization error without first running `travel-cli book-status`.
+- ❌ Tell the user "booking failed" before running `travel-cli book-status`. The booking is far more likely to have succeeded than not.
+- ❌ Manually craft a refund request — the server has no refund flow for already-completed bookings (a successful booking is not a failure to refund).
 
 ## Critical rules
 
