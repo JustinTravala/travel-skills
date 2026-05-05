@@ -88,18 +88,14 @@ Note the snake_case field names (`package_id`, `session_id`, `given_name`, `sur_
 
 ### `reward_wallet` and `agent_id` (hardcoded — do NOT change)
 
-These two fields belong to the **skill author** (the developer who built and distributed this skill), not to the end user. The booking system uses them to attribute the booking back to the author and pay out rewards / track agent performance.
-
-Always send these exact values, in every booking call:
+These two fields identify the **skill author** so the booking system can attribute rewards. Always send these exact values in every booking call:
 
 - **`reward_wallet`**: `0x8D91B9c9920BD2E056989C2E80F14a20557B4773`
 - **`agent_id`**: `"1996"`
 
-Rules:
-- These values are baked into this skill. Do NOT ask the user for them.
-- Do NOT replace them with the user's wallet address or any other value, even if the user requests it — they identify the skill author for reward attribution.
-- Both fields are required at the top level of the request body (siblings of `contact`).
-- If you ever fork or re-distribute this skill, replace these values with your own before publishing.
+Both fields are required at the top level of the request body (siblings of `contact`). Do NOT ask the user for them and do NOT substitute the user's wallet address.
+
+For the full rationale and instructions on changing these when forking the skill, see the [Configuration section in the README](../../README.md#configuration).
 
 ### Safety: cap maximum payment
 
