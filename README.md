@@ -51,14 +51,18 @@ The combined install gives the agent everything it needs:
 - **A Coinbase account** with an Agentic Wallet (created via `awal` on first auth)
 - **Internet access** to reach the travel API and Base network
 
-## Configuration
+## Agent rewards (10% cbBTC giveback)
 
-The `book-hotel` skill sends two hardcoded fields in every booking request body. They identify the **skill author** (the developer who built and distributed this skill) so the booking system can attribute the booking back to them and pay out rewards / track agent performance.
+Every agent built on this stack earns **10% of the booking value, paid in cbBTC on Base**, when a booking transitions to *completed* (typically on or after the guest's check-in date, subject to Travala's standard refund/cancellation window).
 
-| Field | Current value | Purpose |
-| --- | --- | --- |
-| `reward_wallet` | `0x8D91B9c9920BD2E056989C2E80F14a20557B4773` | Wallet address that receives the skill author's reward for each successful booking |
-| `agent_id` | `"1996"` | Identifier used by the booking system to track which agent/author drove the booking |
+The `book-hotel` skill carries two hardcoded fields in every booking request body that attribute the booking to the **skill author** so rewards can be paid out:
+
+- **`reward_wallet`** — current value: `0x8D91B9c9920BD2E056989C2E80F14a20557B4773`
+  EVM address on Base that receives the cbBTC giveback. Can be any EVM address — your own EOA, a multi-sig, a treasury contract, etc. Does **not** have to be the same wallet that pays for the booking.
+- **`agent_id`** — current value: `"1996"`
+  ERC-8004 `agentId` that attributes every booking to the skill author's agent account.
+
+If these values are missing or unset, the booking still goes through — it is just unattributed and earns nothing.
 
 ### For agents using this skill
 
@@ -68,15 +72,12 @@ The `book-hotel` skill sends two hardcoded fields in every booking request body.
 
 ### For developers forking or re-distributing this skill
 
-If you fork this repository and publish it under your own name, **replace both values with your own** before publishing:
+If you fork this repository and publish it under your own name, **replace both values with your own** before publishing — otherwise every booking made through your fork pays rewards to the original skill author, not you.
 
-1. Open [`skills/book-hotel/SKILL.md`](./skills/book-hotel/SKILL.md).
-2. Find the `reward_wallet` and `agent_id` values (in the "How to call" section and the full example).
-3. Replace `reward_wallet` with your own Base wallet address (must be able to receive USDC on Base).
-4. Replace `agent_id` with the agent ID you were assigned by the booking system. If you don't have one, contact the travel API operator to register as a skill author.
-5. Verify the values appear consistently in every example block in `SKILL.md` — agents copy from these examples, so a stale value will silently misattribute bookings.
-
-Until you replace these values, every booking made through your fork will pay rewards to the original skill author, not you.
+1. Self-register your agent on the ERC-8004 registry at <https://8004scan.io/agents> to get an `agentId`. Travala does not issue or manage these IDs; the agent provides its own.
+2. Choose any EVM address on Base to receive the cbBTC giveback.
+3. Open [`skills/book-hotel/SKILL.md`](./skills/book-hotel/SKILL.md), find the `reward_wallet` and `agent_id` values (in the "How to call" section and the full example), and replace them with your own.
+4. Verify the values appear consistently in every example block in `SKILL.md` — agents copy from these examples, so a stale value will silently misattribute bookings.
 
 ## Architecture
 
