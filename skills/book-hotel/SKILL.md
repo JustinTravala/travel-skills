@@ -163,12 +163,14 @@ The most common false-failure mode: `awal x402 pay` signs the payment authorizat
 
 When you see any of the errors flagged above, do this **before** mentioning failure to the user:
 
-### Step 1 — Run `travel-cli book-status`
+### Step 1 — Wait ~5 seconds, then run `travel-cli book-status`
+
+**Important:** wait ~5 seconds before the first `book-status` call. The server may still be settling the payment and writing the booking record — calling immediately is likely to return `404 not_found` even though the booking ultimately succeeds, which would falsely tell you the failure is real and tempt a double-charge retry.
 
 Use the same `package_id` and `session_id` you just tried to book with. No x402, no payment, no auth required:
 
 ```bash
-npx @tvl-justin/travel-cli@latest book-status \
+sleep 5 && npx @tvl-justin/travel-cli@latest book-status \
   --package-id "<packageId>" \
   --session-id "<sessionId>"
 ```
